@@ -11,7 +11,7 @@ services:
 #    command: sync --skip-links example: /net/example.com/export/data/
 #    volumes:
 #      - ./secrets/.aws/credentials:/run/secrets/aws_credentials # for docker-compose, use this instead of secrets
-#      - ./config/rclone.conf:/root/.config/rclone/rclone.conf # for docker-compose, use this instead of configs
+#      - ./configs/rclone.conf:/root/.config/rclone/rclone.conf # for docker-compose, use this instead of configs
 #      - data:/net/example.com/export/data
     configs:
       - source: rclone
@@ -40,7 +40,7 @@ services:
 #      o: addr=example.com
 configs:
   rclone:
-    file: config/rclone.conf
+    file: configs/rclone.conf
 secrets:
   aws_credentials:
     file: secrets/.aws/credentials
