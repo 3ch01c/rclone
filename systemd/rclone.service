@@ -1,0 +1,12 @@
+[Unit]
+Description=Rclone data
+Requires=docker.service
+After=docker.service
+OnFailure=unit-status-mail@%n.service
+
+[Service]
+ExecStart=/usr/local/bin/docker-compose -f /srv/rclone/docker-compose.yml up
+ExecStop=/usr/local/bin/docker-compose -f /srv/rclone/docker-compose.yml stop
+
+[Install]
+WantedBy=default.target

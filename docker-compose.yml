@@ -1,15 +1,18 @@
 version: "3.7"
 services:
   rclone:
-    image: rclone:dev
+    image: rclone/rclone:1.54
     environment:
       - http_proxy
       - https_proxy
       - no_proxy
       - AWS_SHARED_CREDENTIALS_FILE=/run/secrets/aws_credentials
-    command: '"rclone sync --skip-links --max-age 1y /net/example.com/export/data/ default:data/"'
-    volumes:
-      - data:/net/example.com/export/data
+      - RCLONE_CONFIG=/root/.config/rclone/rclone.conf
+#    command: sync --skip-links example: /net/example.com/export/data/
+#    volumes:
+#      - ./secrets/.aws/credentials:/run/secrets/aws_credentials # for docker-compose, use this instead of secrets
+#      - ./config/rclone.conf:/root/.config/rclone/rclone.conf # for docker-compose, use this instead of configs
+#      - data:/net/example.com/export/data
     configs:
       - source: rclone
         target: /root/.config/rclone/rclone.conf
@@ -20,25 +23,24 @@ services:
         condition: any
         delay: 12h
       resources:
-        limits:
-          cpus: '4'
-          memory: 4G
         reservations:
-          cpus: '4'
-          memory: 4G
-      placement:
-        constraints:
-          - "node.hostname == example.com"
-volumes:
-  data:
-    driver_opts:
-      type: nfs
-      device: :/export/data
-      o: addr=example.com
+          cpus: '0.5'
+          memory: 500M
+        limits:
+          cpus: '2'
+          memory: 2G
+#      placement:
+#        constraints:
+#          - "node.hostname == example"
+#volumes:
+#  data:
+#    driver_opts:
+#      type: nfs
+#      device: :/export/data
+#      o: addr=example.com
 configs:
   rclone:
-    file: rclone.conf
+    file: config/rclone.conf
 secrets:
   aws_credentials:
-    file: .aws/credentials
-
+    file: secrets/.aws/credentials
