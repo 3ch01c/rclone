@@ -3,44 +3,6 @@ services:
   rclone:
     image: rclone/rclone:1.54
     environment:
-      - http_proxy
-      - https_proxy
-      - no_proxy
-      - AWS_SHARED_CREDENTIALS_FILE=/run/secrets/aws_credentials
-      - RCLONE_CONFIG=/root/.config/rclone/rclone.conf
-#    command: sync --skip-links example: /net/example.com/export/data/
-#    volumes:
-#      - ./secrets/.aws/credentials:/run/secrets/aws_credentials # for docker-compose, use this instead of secrets
-#      - ./configs/rclone.conf:/root/.config/rclone/rclone.conf # for docker-compose, use this instead of configs
-#      - data:/net/example.com/export/data
-    configs:
-      - source: rclone
-        target: /root/.config/rclone/rclone.conf
-    secrets:
-      - aws_credentials
-    deploy:
-      restart_policy:
-        condition: any
-        delay: 12h
-      resources:
-        reservations:
-          cpus: '0.5'
-          memory: 500M
-        limits:
-          cpus: '2'
-          memory: 2G
-#      placement:
-#        constraints:
-#          - "node.hostname == example"
-#volumes:
-#  data:
-#    driver_opts:
-#      type: nfs
-#      device: :/export/data
-#      o: addr=example.com
-configs:
-  rclone:
-    file: configs/rclone.conf
-secrets:
-  aws_credentials:
-    file: secrets/.aws/credentials
+      http_proxy:
+      https_proxy:
+      no_proxy:

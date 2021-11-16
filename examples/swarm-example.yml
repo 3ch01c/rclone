@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+  rclone:
+    environment:
+      AWS_SHARED_CREDENTIALS_FILE: /run/secrets/aws_credentials
+      RCLONE_CONFIG: /root/.config/rclone/rclone.conf
+    command: "sync --skip-links example: /net/example.com/export/data/"
+    volumes:
+      - source: data
+        target: /net/example.com/export/data
+    configs:
+      - source: rclone
+        target: /root/.config/rclone/rclone.conf
+    secrets:
+      - aws_credentials
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 12h
+      resources:
+        reservations:
+          cpus: '0.5'
+          memory: 500M
+        limits:
+          cpus: '2'
+          memory: 2G
+      placement:
+        constraints:
+          - "node.hostname == example"
+volumes:
+  data:
+    driver_opts:
+      type: nfs
+      device: :/export/data
+      o: addr=example.com
+configs:
+  rclone:
+    file: configs/rclone.conf
+secrets:
+  aws_credentials:
+    file: secrets/.aws/credentials

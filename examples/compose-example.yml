@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  rclone:
+    environment:
+      AWS_SHARED_CREDENTIALS_FILE: /run/secrets/aws_credentials
+      RCLONE_CONFIG: /root/.config/rclone/rclone.conf
+    command: "sync --skip-links example: /net/example.com/export/data/"
+    volumes:
+      - type: bind
+        source: configs/rclone.conf
+        target: /root/.config/rclone/rclone.conf
+      - source: data
+        target: /net/example.com/export/data
+    secrets:
+      - aws_credentials
+secrets:
+  aws_credentials:
+    file: secrets/.aws/credentials
+volumes:
+  data:
+    driver_opts:
+      type: nfs
+      device: :/export/data
+      o: addr=example.com

@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  rclone:
+    environment:
+      RCLONE_CONFIG: /root/.config/rclone/rclone.conf
+    volumes:
+      - type: bind
+        source: ./configs/
+        target: /root/.config/rclone/
